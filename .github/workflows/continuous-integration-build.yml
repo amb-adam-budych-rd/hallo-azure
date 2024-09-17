@@ -28,4 +28,4 @@ jobs:
         run: ./gradlew build
 
       - name: Copy Jar file
-        run: mv build/libs/$(ls build/libs/*SNAPSHOT.jar) ./app.jar
+        run: mv $(ls build/libs/*SNAPSHOT.jar) ./app.jar

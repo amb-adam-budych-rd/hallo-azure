@@ -26,3 +26,6 @@ jobs:
 
       - name: Build Complete with Gradle
         run: ./gradlew build
+
+      - name: Copy Jar file
+        run: mv build/libs/$(ls build/libs) app.jar

@@ -22,8 +22,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
-          cache: maven
+          cache: gradle
 
       - name: Build Complete with Gradle
-        working-directory: ./complete
         run: ./gradlew build

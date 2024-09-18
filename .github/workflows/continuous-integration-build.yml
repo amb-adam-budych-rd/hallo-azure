@@ -38,15 +38,15 @@ jobs:
           name: jar-file
           path: app.jar
 
-  build-image:
-    runs-on: ubuntu-latest
-    needs: build
-    steps:
-      - uses: actions/checkout@v3
-      - uses: actions/download-artifact@master
-        with:
-          name: jar-file
-          path: app.jar
+#  build-image:
+#    runs-on: ubuntu-latest
+#    needs: build
+#    steps:
+#      - uses: actions/checkout@v3
+#      - uses: actions/download-artifact@master
+#        with:
+#          name: jar-file
+#          path: app.jar
 
 #      - name: Set up QEMU
 #        uses: docker/setup-qemu-action@v2
@@ -61,15 +61,41 @@ jobs:
 #          tenant-id: ${{ secrets.AZURE_TENANT_ID }}
 #          subscription-id: ${{ secrets.AZURE_SUBSCRIPTION_ID }}
 
-      - name: 'Build and push image'
+#      - name: 'Build and push image'
+#        uses: azure/docker-login@v1
+#        with:
+#          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
+#          username: ${{ secrets.REGISTRY_USERNAME }}
+#          password: ${{ secrets.REGISTRY_PASSWORD }}
+#      - run: |
+#          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/gs-rest-service:${{ github.sha }}
+#          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/gs-rest-service:${{ github.sha }}
+
+  build-image:
+    name: 'Build and Push to ACR'
+    runs-on: ubuntu-latest
+
+    defaults:
+      run:
+        shell: bash
+
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@master
+        with:
+          name: jar-file
+          path: app.jar
+
+      - name: Docker Login
         uses: azure/docker-login@v1
         with:
-          login-server: ${{ secrets.REGISTRY_LOGIN_SERVER }}
-          username: ${{ secrets.REGISTRY_USERNAME }}
-          password: ${{ secrets.REGISTRY_PASSWORD }}
-      - run: |
-          docker build . -t ${{ secrets.REGISTRY_LOGIN_SERVER }}/gs-rest-service:${{ github.sha }}
-          docker push ${{ secrets.REGISTRY_LOGIN_SERVER }}/gs-rest-service:${{ github.sha }}
+          login-server: ${{ secrets.AZURE_URL }}
+          username: ${{ secrets.ACR_USERNAME }}
+          password: ${{ secrets.ACR_PASSWORD }}
 
-
-
+      - name: Build and Push to ACR
+        uses: docker/build-push-action@v2
+        with:
+          push: true
+#          tags: ${{ secrets.IMAGE_TAG }}
+          file: Dockerfile

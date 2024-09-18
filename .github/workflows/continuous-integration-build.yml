@@ -73,3 +73,4 @@ jobs:
           push: true
           tags: ${{ secrets.IMAGE_TAG }}
           file: Dockerfile
+          cache-from: type=gha

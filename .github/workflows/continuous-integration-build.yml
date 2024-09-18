@@ -57,7 +57,7 @@ jobs:
           name: jar-file
           path: app.jar
 
-      - name: List Jar file
+      - name: List file
         run: ls .
 
       - name: Set up Docker Buildx
@@ -73,8 +73,7 @@ jobs:
       - name: Build image and Push to ACR
         uses: docker/build-push-action@v6
         with:
+          context: .
+          file: Dockerfile
           push: true
           tags: ${{ secrets.IMAGE_TAG }}
-          cache-from: type=local,src=/tmp/.buildx-cache
-          cache-to: type=local,dest=/tmp/.buildx-cache
-          file: Dockerfile

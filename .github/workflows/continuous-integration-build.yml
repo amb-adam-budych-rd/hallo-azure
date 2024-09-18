@@ -76,4 +76,4 @@ jobs:
           context: .
           file: Dockerfile
           push: true
-          tags: ${{ secrets.IMAGE_TAG }}
+          tags: ${{ secrets.AZURE_URL }}/hallo-azure:${{ github.sha }}

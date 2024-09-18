@@ -33,6 +33,9 @@ jobs:
       - name: Copy Jar file
         run: mv $(ls build/libs/*SNAPSHOT.jar) ./app.jar
 
+      - name: List Jar file
+        run: ls *.jar
+
       - name: Login to ACR
         uses: docker/login-action@v3
         with:

@@ -27,19 +27,27 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-      - name: Build Complete with Gradle
-        run: ./gradlew build
+      - name: Execute Gradle build
+        run: |
+          chmod +x ./gradlew
+          ./gradlew bootJar 
 
       - name: Copy Jar file
-        run: mv $(ls build/libs/*SNAPSHOT.jar) ./app.jar
-
-      - name: List Jar file
-        run: ls *.jar
+        run: mv build/libs/$(ls build/libs) app.jar
 
       - uses: actions/upload-artifact@master
         with:
           name: jar-file
           path: app.jar
+
+#      - name: Build Complete with Gradle
+#        run: ./gradlew build
+#
+#      - name: Copy Jar file
+#        run: mv $(ls build/libs/*SNAPSHOT.jar) ./app.jar
+
+      - name: List Jar file
+        run: ls *.jar
 
   build-image:
     name: 'Build docker image and Push to ACR'

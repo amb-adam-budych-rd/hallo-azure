@@ -1,4 +1,5 @@
 FROM eclipse-temurin:21
-ARG JAR_FILE=*.jar
-COPY ${JAR_FILE} /app2.jar
-ENTRYPOINT ["java","-jar","/app2.jar"]
+RUN mkdir /app
+COPY app.jar /app/app.jar
+WORKDIR /app
+ENTRYPOINT ["java","-jar","app.jar"]

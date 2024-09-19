@@ -27,14 +27,6 @@ jobs:
           distribution: 'temurin'
           cache: gradle
 
-#      - name: Execute Gradle build
-#        run: |
-#          chmod +x ./gradlew
-#          ./gradlew bootJar
-#
-#      - name: Copy Jar file
-#        run: mv build/libs/$(ls build/libs) app.jar
-
       - name: Build Complete with Gradle
         run: ./gradlew build
 
@@ -51,9 +43,9 @@ jobs:
     runs-on: ubuntu-latest
     needs: build
 
-    defaults:
-      run:
-        shell: bash
+#    defaults:
+#      run:
+#        shell: bash
 
     steps:
       - uses: actions/checkout@v4

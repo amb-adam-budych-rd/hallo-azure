@@ -50,7 +50,8 @@ jobs:
           name: jar-file
           path: app.jar
 
-      - uses: paulhatch/semantic-version@v5.4.0
+      - name: Calculate version
+        uses: paulhatch/semantic-version@v5.4.0
         with:
           # The prefix to use to identify tags
           tag_prefix: "v"

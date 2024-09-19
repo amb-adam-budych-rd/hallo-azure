@@ -1,0 +1,45 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: hallo-azure
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: hallo-azure
+  template:
+    metadata:
+      labels:
+        app: hallo-azure
+    spec:
+      nodeSelector:
+        "kubernetes.io/os": linux
+        "kubernetes.azure.com/mode": user
+      containers:
+        - name: hallo-azure
+          image: holon.azurecr.io/hallo-azure:latest
+          ports:
+            - containerPort: 8080
+              name: hallo-azure
+          env:
+            - name: ENV_1
+              value: "test_env"
+          resources:
+            requests:
+              cpu: 1m
+              memory: 200Mi
+            limits:
+              cpu: 1000m
+              memory: 512Mi
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: hallo-azure
+spec:
+  ports:
+    - port: 80
+      targetPort: 8080
+  selector:
+    app: hallo-azure
+  type: LoadBalancer

@@ -48,7 +48,7 @@ jobs:
       - uses: actions/download-artifact@master
         with:
           name: jar-file
-          path: app.
+          path: app.jar
 
 
       - name: Calculate version

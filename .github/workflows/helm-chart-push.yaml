@@ -15,7 +15,7 @@ jobs:
     build:
         name: publish helm chart to acr
         runs-on: ubuntu-latest
-        environment: prod
+
         steps:
             - uses: actions/checkout@v4
               name: checkout repo
@@ -30,8 +30,11 @@ jobs:
 
             - name: save helm chart to local registry
               run: |
-                  helm chart save $/charts/hallo-azure/ ${{ secrets.AZURE_URL }}/hallo-azure-helmchart:${{ env.COMMIT_SHORT_SHA }}
-
-            - name: publish chart to acr
-              run: |
-                  helm chart push ${{ secrets.AZURE_URL }}/hallo-azure-helmchart:latest
+                  echo "VERSION=$(yq -r .version ./charts/hallo-azure/Chart.yaml)" >> "$GITHUB_OUTPUT"
+                helm package ./charts/hallo-azure --version ${{ steps.set-variables.outputs.VERSION }}
+                helm push ./hallo-azure-chart-${{ steps.set-variables.outputs.VERSION }}.tgz oci://${{ secrets.AZURE_URL }}/charts
+#                  helm package ./charts/hallo-azure ${{ secrets.AZURE_URL }}/hallo-azure-helmchart:latest
+#
+#            - name: publish chart to acr
+#              run: |
+#                  helm push oci://${{ secrets.AZURE_URL }}/helm

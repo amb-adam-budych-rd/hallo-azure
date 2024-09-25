@@ -26,7 +26,7 @@ jobs:
 
             - name: login to acr using helm
               run: |
-                  echo $ | helm registry login holon.azurecr.io --username $ --password-stdin
+                  echo ${{ secrets.AZURE_CLIENT_SECRET }} | helm registry login holon.azurecr.io --username ${{ secrets.AZURE_CLIENT_ID }} --password-stdin
 
             - name: save helm chart to local registry
               run: |

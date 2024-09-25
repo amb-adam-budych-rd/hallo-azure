@@ -20,6 +20,11 @@ jobs:
             - uses: actions/checkout@v4
               name: checkout repo
 
+            - name: Set environment variables
+              id: set-variables
+              run: |
+                echo "VERSION=$(yq -r .version ./charts/hallo-azure/Chart.yaml)" >> "$GITHUB_OUTPUT"     
+
             - name: install helm
               uses: azure/setup-helm@v4.2.0
               id: install
@@ -32,5 +37,5 @@ jobs:
               id: build-push
               run: |
                   echo "VERSION=$(yq -r .version ./charts/hallo-azure/Chart.yaml)" >> "$GITHUB_OUTPUT"
-                  helm package ./charts/hallo-azure --version ${{ steps.build-push.outputs.VERSION }}
+                  helm package ./charts/hallo-azure --version ${{ steps.set-variables.outputs.VERSION }}
                   helm push ./hallo-azure-chart-${{ steps.set-variables.outputs.VERSION }}.tgz oci://${{ secrets.AZURE_URL }}/charts

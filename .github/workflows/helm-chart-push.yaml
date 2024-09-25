@@ -29,7 +29,8 @@ jobs:
                   echo ${{ secrets.AZURE_CLIENT_SECRET }} | helm registry login holon.azurecr.io --username ${{ secrets.AZURE_CLIENT_ID }} --password-stdin
 
             - name: save helm chart to local registry
+              id: build-push
               run: |
                   echo "VERSION=$(yq -r .version ./charts/hallo-azure/Chart.yaml)" >> "$GITHUB_OUTPUT"
-                  helm package ./charts/hallo-azure --version ${{ steps.set-variables.outputs.VERSION }}
+                  helm package ./charts/hallo-azure --version ${{ steps.build-push.outputs.VERSION }}
                   helm push ./hallo-azure-chart-${{ steps.set-variables.outputs.VERSION }}.tgz oci://${{ secrets.AZURE_URL }}/charts

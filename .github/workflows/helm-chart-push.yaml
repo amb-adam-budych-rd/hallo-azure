@@ -5,12 +5,6 @@ on:
         branches:
             - master
 
-env:
-    HELM_EXPERIMENTAL_OCI: 1
-    HELM_VERSION_TO_INSTALL: 3.5.0
-    ACR_NAME: holon
-    ACR_REPO_NAME: ${{ secrets.AZURE_URL }}/hallo-azure-helmchart
-
 jobs:
     build:
         name: publish helm chart to acr

@@ -26,12 +26,12 @@ jobs:
 
             - name: login to acr using helm
               run: |
-                  echo $ | helm registry login $.azurecr.io --username $ --password-stdin
+                  echo $ | helm registry login holon.azurecr.io --username $ --password-stdin
 
             - name: save helm chart to local registry
               run: |
-                  helm chart save $/charts/hallo-azure/ $.azurecr.io/$:latest
+                  helm chart save $/charts/hallo-azure/ ${{ secrets.AZURE_URL }}/hallo-azure-helmchart:${{ env.COMMIT_SHORT_SHA }}
 
             - name: publish chart to acr
               run: |
-                  helm chart push $.azurecr.io/$:latest
+                  helm chart push ${{ secrets.AZURE_URL }}/hallo-azure-helmchart:latest

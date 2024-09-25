@@ -1,0 +1,38 @@
+name: Push Helm chart to ACR
+
+on:
+    push:
+        branches:
+            - master
+
+env:
+    HELM_EXPERIMENTAL_OCI: 1
+    HELM_VERSION_TO_INSTALL: 3.5.0
+    ACR_NAME: holon
+    ACR_REPO_NAME: ${{ secrets.AZURE_URL }}/hallo-azure-helmchart
+
+jobs:
+    build:
+        name: publish helm chart to acr
+        runs-on: ubuntu-latest
+        environment: prod
+        steps:
+            - uses: actions/checkout@v2
+              name: checkout repo
+
+            - name: install helm
+              uses: Azure/setup-helm@v1
+              with:
+                  version: ${{ env.HELM_VERSION_TO_INSTALL }}# default is latest
+
+            - name: login to acr using helm
+              run: |
+                  echo $ | helm registry login $.azurecr.io --username $ --password-stdin
+
+            - name: save helm chart to local registry
+              run: |
+                  helm chart save $/charts/hallo-azure/ $.azurecr.io/$:latest
+
+            - name: publish chart to acr
+              run: |
+                  helm chart push $.azurecr.io/$:latest

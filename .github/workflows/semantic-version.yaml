@@ -51,3 +51,4 @@ jobs:
               run: |
                 echo "Sem version: ${{ steps.sem-version.outputs.version }}" 
                 echo "Sem version_tag: ${{ steps.sem-version.outputs.version_tag }}"
+                

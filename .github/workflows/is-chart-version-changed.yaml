@@ -1,0 +1,20 @@
+name: Semantic versioning
+
+on:
+    push:
+        branches:
+            - master
+
+jobs:
+    build:
+        name: Semantic versioning job
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Checkout
+              uses: actions/checkout@v3
+              with:
+                fetch-depth: 0
+            - name: Get changes
+              run: git diff --name-only ${{ github.event.before }} ${{ github.event.after }} ./deployment/charts/hallo-azure/Chart.yaml | grep -q 'version' && echo chart version changed
+                

@@ -16,5 +16,16 @@ jobs:
               with:
                 fetch-depth: 0
             - name: Get changes
-              run: git diff ${{ github.event.before }} ${{ github.event.after }} ./charts/hallo-azure/Chart.yaml | grep -q 'version' && echo chart version changed
+              run: |
+                  if git diff ${{ github.event.before }} ${{ github.event.after }} ./charts/hallo-azure/Chart.yaml | grep -q 'version'; then
+                    echo found
+                  else
+                    echo not found
+                  fi 
+                  
+              
+              
+              
+
+#              run: git diff ${{ github.event.before }} ${{ github.event.after }} ./charts/hallo-azure/Chart.yaml | grep -q 'version' && echo chart version changed
                 

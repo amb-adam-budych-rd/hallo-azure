@@ -13,9 +13,8 @@ jobs:
         steps:
             - name: Checkout
               uses: actions/checkout@v4
-              with:
-                fetch-depth: 0
-            - name: Get changes
+
+            - name: Is helm chart version changed
               id: is-chart-changed
               run: |
                   if git diff ${{ github.event.before }} ${{ github.event.after }} ./charts/hallo-azure/Chart.yaml | grep -q 'version'; then

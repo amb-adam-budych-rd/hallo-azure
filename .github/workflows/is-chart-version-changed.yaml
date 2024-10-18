@@ -23,7 +23,7 @@ jobs:
                     echo "chart_version_changed=false" >> $GITHUB_ENV
                   fi 
 
-            - name: Debug changes
+            - name: Debug changes s
               run: |
                 echo "${{ env.chart_version_changed }}"
 

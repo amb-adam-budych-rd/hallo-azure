@@ -1,4 +1,4 @@
-name: Semantic versioning
+name: Is version changed
 
 on:
     push:

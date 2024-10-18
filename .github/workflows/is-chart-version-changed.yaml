@@ -25,11 +25,21 @@ jobs:
                     echo "chart_version_changed=false" >> $GITHUB_ENV
                   fi 
 
-            - name: Debug changes s
-              run: |
-                echo "${{ env.chart_version_changed }}"
+            - name: Use custom action to check chart version
+              id: check_version
+              uses: amb-adam-budych-rd/check-chart-version-action
+              with:
+                chart_path: './charts/hallo-azure/Chart.yaml'
 
-            - name: Run condition  command
+            - name: Debug changes
+              run: |
+                echo "inside check: ${{ env.chart_version_changed }}"
+                echo "separate check: ${{ steps.check_version.outputs.is_chart_version_changed }}"
+
+            - name: Run inside condition command
               if: env.chart_version_changed == 'true'
               run: echo chart version changed and build executed
-                
+
+            - name: Run separate condition command
+              if: steps.check_version.outputs.is_chart_version_changed == 'true'
+              run: echo chart version changed and build executed

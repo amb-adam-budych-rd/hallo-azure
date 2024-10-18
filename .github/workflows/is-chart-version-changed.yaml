@@ -27,7 +27,7 @@ jobs:
 
             - name: Use custom action to check chart version
               id: check_version
-              uses: amb-adam-budych-rd/hallo-github/actions/check-helm-chart-version-changed.yaml
+              uses: amb-adam-budych-rd/hallo-github/actions
               with:
                 chart_path: './charts/hallo-azure/Chart.yaml'
 

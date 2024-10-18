@@ -16,16 +16,19 @@ jobs:
               with:
                 fetch-depth: 0
             - name: Get changes
+              id: is-chart-changed
               run: |
                   if git diff ${{ github.event.before }} ${{ github.event.after }} ./charts/hallo-azure/Chart.yaml | grep -q 'version'; then
-                    echo found
+                    echo "chart_version_changed=true" >> $GITHUB_ENV
                   else
-                    echo not found
+                    echo "chart_version_changed=false" >> $GITHUB_ENV
                   fi 
-                  
-              
-              
-              
 
-#              run: git diff ${{ github.event.before }} ${{ github.event.after }} ./charts/hallo-azure/Chart.yaml | grep -q 'version' && echo chart version changed
+            - name: Debug changes
+              run: |
+                echo "${{ env.chart_version_changed }}"
+
+            - name: Run condition  command
+              if: env.changes_exist == 'true'
+              run: echo chart version changed and build executed
                 

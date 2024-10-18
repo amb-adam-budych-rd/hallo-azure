@@ -29,6 +29,6 @@ jobs:
                 echo "${{ env.chart_version_changed }}"
 
             - name: Run condition  command
-              if: env.changes_exist == 'true'
+              if: env.chart_version_changed == 'true'
               run: echo chart version changed and build executed
                 

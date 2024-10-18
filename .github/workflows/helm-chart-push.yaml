@@ -1,9 +1,9 @@
 name: Push Helm chart to ACR
 
-on:
-    push:
-        branches:
-            - master
+#on:
+#    push:
+#        branches:
+#            - master
 
 jobs:
     build:

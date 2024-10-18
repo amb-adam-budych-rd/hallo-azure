@@ -19,7 +19,7 @@ jobs:
             - name: Is helm chart version changed
               id: is-chart-changed
               run: |
-                  if git diff ${{ github.event.before }} ${{ github.event.after }} ./charts/hallo-azure/Chart.yaml | grep -q '+version'; then
+                  if git diff ${{ github.event.before }} ${{ github.event.after }} ./charts/hallo-azure/Chart.yaml | grep -q '+version:'; then
                     echo "chart_version_changed=true" >> $GITHUB_ENV
                   else
                     echo "chart_version_changed=false" >> $GITHUB_ENV
@@ -27,7 +27,7 @@ jobs:
 
             - name: Use custom action to check chart version
               id: check_version
-              uses: amb-adam-budych-rd/hallo-github/actions/check-helm-chart-version-changed@v7
+              uses: amb-adam-budych-rd/hallo-github/actions/check-helm-chart-version-changed@v8
               with:
                 chart_path: './charts/hallo-azure/Chart.yaml'
 

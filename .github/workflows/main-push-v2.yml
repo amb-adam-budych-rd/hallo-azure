@@ -1,4 +1,4 @@
-name: CI Build & push
+name: Build main
 
 on:
   push:
@@ -7,7 +7,7 @@ on:
 
 env:
   APP_NAME: hallo-azure
-  CHART_PATH: "./charts/hallo-azure"
+  CHART_PATH: ./charts/hallo-azure
   ACR_URL: ${{ secrets.AZURE_URL }}
   ACR_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
   ACR_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
@@ -17,7 +17,7 @@ permissions:
   contents: read
 jobs:
   build:
-    name: Build app
+    name: Build app job
     runs-on: ubuntu-latest
     steps:
       - name: Checkout

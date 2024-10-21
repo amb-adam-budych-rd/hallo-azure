@@ -7,9 +7,10 @@ on:
 
 env:
   APP_NAME: hallo-azure
+  CHART_PATH: "./charts/hallo-azure"
   ACR_URL: ${{ secrets.AZURE_URL }}
-  ACR_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
-  ACR_CLIENT_SECRET: "${{ secrets.AZURE_CLIENT_SECRET }}"
+  ACR_CLIENT_ID: ${{ secrets.AZURE_CLIENT_ID }}
+  ACR_CLIENT_SECRET: ${{ secrets.AZURE_CLIENT_SECRET }}
 
 permissions:
   id-token: write
@@ -50,7 +51,7 @@ jobs:
         id: check-version
         uses: amb-adam-budych-rd/hallo-github/actions/check-helm-chart-version-changed@v1
         with:
-          chart_path: './charts/hallo-azure'
+          chart_path: ${{ env.CHART_PATH }}
 
       - name: Helm Chart Build & Push
         if: steps.check-version.outputs.chart_version_changed == 'true'
@@ -59,4 +60,4 @@ jobs:
           registry_url: ${{ env.ACR_URL }}
           client_id: ${{ env.ACR_CLIENT_ID }}
           client_secret: ${{ env.ACR_CLIENT_SECRET }}
-          chart_path: './charts/hallo-azure'
+          chart_path: ${{ env.CHART_PATH }}

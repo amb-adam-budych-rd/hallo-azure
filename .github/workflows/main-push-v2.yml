@@ -1,0 +1,60 @@
+name: CI Build & push
+
+on:
+  push:
+    branches:
+      - master
+
+env:
+  APP_NAME: hallo-azure
+  ACR_URL: ${{ secrets.AZURE_URL }}
+  ACR_CLIENT_ID: "${{ secrets.AZURE_CLIENT_ID }}"
+  ACR_CLIENT_SECRET: "${{ secrets.AZURE_CLIENT_SECRET }}"
+
+permissions:
+  id-token: write
+  contents: read
+jobs:
+  build:
+    name: Build app
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Set up JDK 21
+        uses: actions/setup-java@v3
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+          cache: gradle
+
+      - name: Gradle Build
+        run: ./gradlew build
+
+      - name: Copy Jar file
+        run: mv $(ls build/libs/*SNAPSHOT.jar) ./app.jar
+
+      - name: Docker Image Build & Push
+        uses: amb-adam-budych-rd/hallo-github/actions/build-push-docker-image@v1
+        with:
+          registry_url: ${{ env.ACR_URL }}
+          client_id: ${{ env.ACR_CLIENT_ID }}
+          client_secret: ${{ env.ACR_CLIENT_SECRET }}
+          dockerfile_path: './Dockerfile'
+          application_name: ${{ env.APP_NAME }}
+
+      - name: Check if Helm chart version has changed
+        id: check-version
+        uses: amb-adam-budych-rd/hallo-github/actions/check-helm-chart-version-changed@v1
+        with:
+          chart_path: './charts/hallo-azure'
+
+      - name: Helm Chart Build & Push
+        if: steps.check-version.outputs.chart_version_changed == 'true'
+        uses: amb-adam-budych-rd/hallo-github/actions/build-push-helm-chart@v1
+        with:
+          registry_url: ${{ env.ACR_URL }}
+          client_id: ${{ env.ACR_CLIENT_ID }}
+          client_secret: ${{ env.ACR_CLIENT_SECRET }}
+          chart_path: './charts/hallo-azure'
